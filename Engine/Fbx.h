@@ -68,4 +68,6 @@ public:
 	HRESULT Load(std::string fileName);
 	void    Draw(Transform& transform);
 	void    Release();
+private:
+	int nowShaderType;
 };

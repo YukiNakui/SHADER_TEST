@@ -5,10 +5,11 @@
 #include "Texture.h"
 #include <vector>
 #include <filesystem>
+#include"Input.h"
 
 Fbx::Fbx()
 	:vertexCount_(0), polygonCount_(0), materialCount_(0),
-	pVertexBuffer_(nullptr), pIndexBuffer_(nullptr), pConstantBuffer_(nullptr)
+	pVertexBuffer_(nullptr), pIndexBuffer_(nullptr), pConstantBuffer_(nullptr),nowShaderType(SHADER_POINT)
 {
 }
 
@@ -282,7 +283,16 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
-	Direct3D::SetShader(SHADER_POINT);
+	if (Input::IsKeyDown(DIK_L)) {
+		if (nowShaderType == SHADER_POINT)
+			nowShaderType = SHADER_3D;
+		else
+			nowShaderType = SHADER_POINT;
+	}
+	if (nowShaderType == SHADER_POINT)
+		Direct3D::SetShader(SHADER_POINT);
+	else
+		Direct3D::SetShader(SHADER_3D);
 	transform.Calclation();//トランスフォームを計算
 	
 
