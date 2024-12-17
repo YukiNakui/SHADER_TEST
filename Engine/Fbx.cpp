@@ -287,7 +287,7 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 
 void Fbx::Draw(Transform& transform)
 {
-	if (Input::IsKeyDown(DIK_L)) {
+	/*if (Input::IsKeyDown(DIK_L)) {
 		if (nowShaderType == SHADER_POINT)
 			nowShaderType = SHADER_3D;
 		else
@@ -296,7 +296,8 @@ void Fbx::Draw(Transform& transform)
 	if (nowShaderType == SHADER_POINT)
 		Direct3D::SetShader(SHADER_POINT);
 	else
-		Direct3D::SetShader(SHADER_3D);
+		Direct3D::SetShader(SHADER_3D);*/
+	Direct3D::SetShader(SHADER_TOON);
 	transform.Calclation();//トランスフォームを計算
 	
 
