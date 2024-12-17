@@ -85,9 +85,9 @@ float4 PS(VS_OUT inData) : SV_Target
     float3 dir = normalize(lightPosition.xyz - inData.wpos.xyz); //ピクセル位置のポリゴンの3次元座標＝wpos
     //inData.normal.z = 0;
     float color = saturate(dot(normalize(inData.normal.xyz), dir));
-    //float3 k = { 0.2f, 0.2f, 1.0f };
-    //float len = length(lightPosition.xyz - inData.wpos.xyz);
-    //float dTerm = 1.0 / (k.x + k.y * len + k.z * len * len);
+    float3 k = { 0.2f, 0.2f, 1.0f };
+    float len = length(lightPosition.xyz - inData.wpos.xyz);
+    float dTerm = 1.0 / (k.x + k.y * len + k.z * len * len);
     
     float4 R = reflect(normalize(inData.normal), normalize(float4(dir, 1.0)));
     float4 specular = pow(saturate(dot(R, normalize(inData.eyev))), shininess) * specularColor;

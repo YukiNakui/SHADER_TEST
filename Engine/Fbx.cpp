@@ -244,7 +244,11 @@ void Fbx::InitMaterial(fbxsdk::FbxNode* pNode)
 				pMaterialList_[i].specular = { (float)specular[0],(float)specular[1], (float)specular[2], 1.0f };
 				pMaterialList_[i].shininess = { (float)shininess,(float)shininess, (float)shininess, 1.0 };
 			}
-			
+			else
+			{
+				pMaterialList_[i].specular = { 0.0f,0.0f,0.0f,1.0f };
+				pMaterialList_[i].shininess = { 10.0f,10.0f,10.0f, 1.0 };
+			}
 
 
 		}

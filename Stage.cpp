@@ -33,6 +33,10 @@ Stage::Stage(GameObject* parent)
     hGround = -1;
     hRoom_ = -1;
     hBunny_ = -1;
+    hDonut1_ = -1;
+    hDonut2_ = -1;
+    hDonut3_ = -1;
+    hDonut4_ = -1;
 }
 
 //デストラクタ
@@ -47,6 +51,11 @@ void Stage::Initialize()
     hRoom_ = Model::Load("Assets\\room.fbx");
     hGround = Model::Load("Assets\\plane3.fbx");
     hBunny_ = Model::Load("Assets\\Donut_phong.fbx");
+
+    hDonut1_ = Model::Load("Assets\\Donut.fbx");
+    hDonut2_ = Model::Load("Assets\\DonutLambert.fbx");
+    hDonut3_ = Model::Load("Assets\\DonutNotTextureLambert.fbx");
+    hDonut4_ = Model::Load("Assets\\DonutNonTexturePhong.fbx");
     Camera::SetPosition(XMFLOAT3{ 0, 0.8, -2.8 });
     Camera::SetTarget(XMFLOAT3{ 0,0.8,0 });
 
@@ -132,14 +141,39 @@ void Stage::Draw()
     Model::SetTransform(hRoom_, tr);
     Model::Draw(hRoom_);
 
-    static Transform tbunny;
+    /*static Transform tbunny;
     tbunny.scale_ = { 0.25,0.25,0.25 };
     tbunny.position_ = { 0, 0.5, 0 };
     tbunny.rotate_.y += 0.1;
     Model::SetTransform(hBunny_, tbunny);
-    Model::Draw(hBunny_);
+    Model::Draw(hBunny_);*/
 
-    ImGui::Text("Rotate:%.3f", tbunny.rotate_.y);
+    static Transform tDonut1;
+    tDonut1.scale_ = { 0.8,0.8,0.8 };
+    tDonut1.position_ = { -0.5, 1.0, 0 };
+    tDonut1.rotate_.y += 0.1;
+    Model::SetTransform(hDonut1_, tDonut1);
+    Model::Draw(hDonut1_);
+    static Transform tDonut2;
+    tDonut2.scale_ = { 0.8,0.8,0.8 };
+    tDonut2.position_ = { 0.5, 1.0, 0 };
+    tDonut2.rotate_.y += 0.1;
+    Model::SetTransform(hDonut2_, tDonut2);
+    Model::Draw(hDonut2_);
+    static Transform tDonut3;
+    tDonut3.scale_ = { 0.8,0.8,0.8 };
+    tDonut3.position_ = { 0.5, 0.3, 0 };
+    tDonut3.rotate_.y += 0.1;
+    Model::SetTransform(hDonut3_, tDonut3);
+    Model::Draw(hDonut3_);
+    static Transform tDonut4;
+    tDonut4.scale_ = { 0.8,0.8,0.8 };
+    tDonut4.position_ = { -0.5, 0.3, 0 };
+    tDonut4.rotate_.y += 0.1;
+    Model::SetTransform(hDonut4_, tDonut4);
+    Model::Draw(hDonut4_);
+
+    //ImGui::Text("Rotate:%.3f", tbunny.rotate_.y);
 
 }
 
