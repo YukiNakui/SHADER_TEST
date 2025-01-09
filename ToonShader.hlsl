@@ -61,7 +61,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
     float4 light = lightPosition;
     light = normalize(light);
     outData.color = clamp(dot(normal, light), 0, 1);
-
+    
 	//Ç‹Ç∆ÇﬂÇƒèoóÕ
     return outData;
 }
@@ -76,6 +76,8 @@ float4 PS(VS_OUT inData) : SV_Target
     float4 diffuse;
     float4 ambient;
     
+    //float NE = dot(inData.normal.xyz, normalize(inData.eyev.xyz));//ñ@ê¸Ç∆éãê¸ÇÃcos
+    
     float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
     float4 n1 = float4(1.0f / 4.0f, 1.0f / 4.0f, 1.0f / 4.0f, 1.0f);
     float4 n2 = float4(2.0f / 4.0f, 2.0f / 4.0f, 2.0f / 4.0f, 1.0f);
@@ -87,11 +89,11 @@ float4 PS(VS_OUT inData) : SV_Target
                 + 0.3 * step(n3, inData.color);
     
     //float4 OutColor;
-    //if(NL.x < 1.0f/4.0f)
+    //if (NL.x < 1.0f / 4.0f)
     //{
     //    OutColor = float4(1.0f / 4.0f, 1.0f / 4.0f, 1.0f / 4.0f, 1.0f);
     //}
-    //else if(NL.x < 2.0f/4.0f)
+    //else if (NL.x < 2.0f / 4.0f)
     //{
     //    OutColor = float4(2.0f / 4.0f, 2.0f / 4.0f, 2.0f / 4.0f, 1.0f);
     //}
@@ -115,6 +117,14 @@ float4 PS(VS_OUT inData) : SV_Target
         ambient = g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 
     }
+    
+    //float4 ret = diffuse + ambient;
+    //if (NE > -0.1 && NE < 0.1)
+    //{
+    //    ret = float4(0, 0, 0, 1);
+    //}
+    //return ret;
+    
 	//return g_texture.Sample(g_sampler, inData.uv);// (diffuse + ambient);]
 	//float4 diffuse = lightSource * inData.color;
 	//float4 ambient = lightSource * ambentSource;
