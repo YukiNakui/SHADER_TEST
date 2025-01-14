@@ -5,6 +5,7 @@ Texture2D g_texture : register(t0); //テクスチャー
 SamplerState g_sampler : register(s0); //サンプラー
 
 Texture2D g_toon_texture : register(t1); //テクスチャー
+SamplerState g_toon_sampler : register(s1); //サンプラー
 
 //───────────────────────────────────────
 // コンスタントバッファ
@@ -53,9 +54,8 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	//スクリーン座標に変換し、ピクセルシェーダーへ
     outData.pos = mul(pos, matWVP);
     outData.uv = uv;
-
-    float4 wnormal = mul(normal, matNormal);
-    outData.normal = wnormal;
+    
+    outData.normal = mul(normal, matNormal);
     
 	//float4 light = float4(0, 1, -1, 0);
     float4 light = lightPosition;
@@ -76,44 +76,28 @@ float4 PS(VS_OUT inData) : SV_Target
     float4 diffuse;
     float4 ambient;
     
-    //float NE = dot(inData.normal.xyz, normalize(inData.eyev.xyz));//法線と視線のcos
+    float NL = saturate(dot(inData.normal, normalize(lightPosition)));
     
-    float4 NL = saturate(dot(inData.normal, normalize(lightPosition)));
-    float4 n1 = float4(1.0f / 4.0f, 1.0f / 4.0f, 1.0f / 4.0f, 1.0f);
-    float4 n2 = float4(2.0f / 4.0f, 2.0f / 4.0f, 2.0f / 4.0f, 1.0f);
-    float4 n3 = float4(3.0f / 4.0f, 3.0f / 4.0f, 3.0f / 4.0f, 1.0f);
-    float4 n4 = float4(4.0f / 4.0f, 4.0f / 4.0f, 4.0f / 4.0f, 1.0f);
+    float2 uv = float2(NL, 0);
+    float4 tI = g_toon_texture.Sample(g_sampler, uv);
+    
+    //float4 n1 = float4(1.0f / 4.0f, 1.0f / 4.0f, 1.0f / 4.0f, 1.0f);
+    //float4 n2 = float4(2.0f / 4.0f, 2.0f / 4.0f, 2.0f / 4.0f, 1.0f);
+    //float4 n3 = float4(3.0f / 4.0f, 3.0f / 4.0f, 3.0f / 4.0f, 1.0f);
+    //float4 n4 = float4(4.0f / 4.0f, 4.0f / 4.0f, 4.0f / 4.0f, 1.0f);
     //float4 tI = 0.1 * step(n1, NL) + 0.2 * step(n2, NL)
     //            + 0.3 * step(n3, NL) + 0.4 * step(n4, NL);
-    float4 tI = 0.1 * step(n1, inData.color) + 0.3 * step(n2, inData.color)
-                + 0.3 * step(n3, inData.color);
-    
-    //float4 OutColor;
-    //if (NL.x < 1.0f / 4.0f)
-    //{
-    //    OutColor = float4(1.0f / 4.0f, 1.0f / 4.0f, 1.0f / 4.0f, 1.0f);
-    //}
-    //else if (NL.x < 2.0f / 4.0f)
-    //{
-    //    OutColor = float4(2.0f / 4.0f, 2.0f / 4.0f, 2.0f / 4.0f, 1.0f);
-    //}
-    //else if (NL.x < 3.0f / 4.0f)
-    //{
-    //    OutColor = float4(3.0f / 4.0f, 3.0f / 4.0f, 3.0f / 4.0f, 1.0f);
-    //}
-    //else
-    //{
-    //    OutColor = float4(4.0f / 4.0f, 4.0f / 4.0f, 4.0f / 4.0f, 1.0f);
-    //}
+    //float4 tI = 0.1 * step(n1, inData.color) + 0.3 * step(n2, inData.color)
+    //            + 0.3 * step(n3, inData.color);
     
     if (isTextured == false)
     {
-        diffuse = diffuseColor * tI * factor.x;
+        diffuse = diffuseColor * tI;
         ambient = diffuseColor * ambentSource;
     }
     else
     {
-        diffuse = g_texture.Sample(g_sampler, inData.uv) * tI * factor.x;
+        diffuse = g_texture.Sample(g_sampler, inData.uv) * tI;
         ambient = g_texture.Sample(g_sampler, inData.uv) * ambentSource;
 
     }
@@ -128,8 +112,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	//return g_texture.Sample(g_sampler, inData.uv);// (diffuse + ambient);]
 	//float4 diffuse = lightSource * inData.color;
 	//float4 ambient = lightSource * ambentSource;
-    //return diffuse + ambient;
+    return diffuse + ambient;
     //return tI;
-    float2 uv = float2(tI.x, 0);
-    return g_toon_texture.Sample(g_sampler, uv) + diffuse + ambient;
+    //float2 uv = float2(tI.x, 0);
+    //return g_toon_texture.Sample(g_sampler, uv) + diffuse + ambient;
 }
