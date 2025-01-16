@@ -44,8 +44,8 @@ HRESULT Direct3D::Initialize(int winW, int winH, HWND hWnd)
 	ZeroMemory(&scDesc, sizeof(scDesc));
 
 	//描画先のフォーマット
-	scDesc.BufferDesc.Width = winW;		//画面幅
-	scDesc.BufferDesc.Height = winH;	//画面高さ
+	scDesc.BufferDesc.Width = 0;		//画面幅 winW -> 0に変更
+	scDesc.BufferDesc.Height = 0;	//画面高さ winH -> 0に変更
 	scDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;	// 何色使えるか
 
 	//FPS（1/60秒に1回）
@@ -554,6 +554,8 @@ void Direct3D::BeginDraw()
 
 	//深度バッファクリア
 	pContext_->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	
+	//  新フレームの開始
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();

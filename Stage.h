@@ -20,6 +20,8 @@ class Stage : public GameObject
     int hDonut3_;
     int hDonut4_;
 
+    bool isRotate_;
+
     ID3D11Buffer* pConstantBuffer_;
     void InitConstantBuffer();
 public:
